@@ -6,7 +6,7 @@
     "start": "node server.js"
   },
   "dependencies": {
-    
+    "url": "0.10.3"
   },
   "repository": {
     "type": "",
