@@ -1,11 +1,11 @@
 # What it is
 
 
-It is a prerendering server based on PhantomJS. It loads JS based app
+It is a pre-rendering server based on PhantomJS. It loads JS based app
 remotely and sends already processed page with JS cut out.
 
-The idea is based on [angular-seo](https://github.com/steeve/angular-
-seo) But the actual code was changed to fit our GoAbout app. However,
+The idea is based on [angular-seo](https://github.com/steeve/angular-seo)
+But the actual code was changed to fit our GoAbout app. However,
 the renderer is app-agnostic and it can be used with any JS-based app,
 not only ours. You just need to install it on your own machine.
 
@@ -24,7 +24,6 @@ The solution is made of 4 parts:
 Just add this to your `<head>` to enable AJAX indexing by the crawlers.
 
 	<meta name="fragment" content="!" />
-
 
 I'm assuming there that you use HTML5 mode on your app. Otherwise check
 [Angular-seo](https://github.com/steeve/angular-seo).
@@ -46,7 +45,7 @@ seconds delay.
 For the app to be properly rendered, you will need to run the
 `server.js` with PhantomJS. Make sure to disable caching:
 
-	$ phantomjs --disk-cache=no server.js [port] [URL prefix]
+	$ phantomjs --disk-cache=no server.js [URL prefix] [port]
 
 `URL prefix` is the URL that will be prepended to the path the crawlers
 will try to get.
@@ -110,16 +109,16 @@ prevent never-ending loops.
 Make a get request to the server with path which is the same as actual
 path and with header `X-Download-From` containing actual host address.
 
-For example, that request: `http://localhost:8082/pages/premium-
-index/mywheels` with `X-Download-From: https://goabout.com` Will render
-page at https://goabout.com/pages/premium-index/mywheels
+For example, this request (running PhantomJS locally on port 80802):
 
+	curl -H 'X-Download-From: https://goabout.com' 'http://localhost:8082/pages/premium-index/mywheels'
+
+Will render page at `https://goabout.com/pages/premium-index/mywheels`
 
 If there is no `X-Download-From` then the app will use default host
-defined in `Procfile` (GoAbout.com in our case)
+defined in `Procfile` (`goabout.com` in our case)
 
 ## Create a pre-render machine
-
 
 An easy way would be to make a machine at Heroku.com with PhantomJS
 buildpack(https://github.com/stomita/heroku-buildpack-phantomjs) Just
