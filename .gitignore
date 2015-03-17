@@ -1,3 +1,9 @@
+# Project specific
+
+/config-local.json
+
+# Other
+
 *.csv
 *.dat
 *.iml
