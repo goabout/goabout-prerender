@@ -1,6 +1,7 @@
 var fs = require('fs');
 var system = require('system');
 var urlModule = require('url');
+var extend = require('extend');
 
 var checkVersion = function(major, minor, patch) {
     if (phantom.version.major < major) { return false; }
@@ -60,53 +61,30 @@ var renderHtml = function(url, cb) {
 };
 
 var configure = function() {
-    console.info("Reading config.json");
 
-    var content = fs.read('config.json');
-    var settings = JSON.parse(content);
-
-    var options = {}
-
-    if (fs.exists('/etc/prerender.json')) {
-        console.info("Reading /etc/prerender.json");
-        var content = fs.read('/etc/prerender.json');
-        var options = JSON.parse(content);
-    }
-    settings = mergeOptions(settings, options);
-
-    if (fs.exists('config-local.json')) {
-        console.info("Reading config-local.json");
-        var content = fs.read('config-local.json');
-        var options = JSON.parse(content);
-    }
-    settings = mergeOptions(settings, options);
-
-    return settings;
-}
-
-var mergeOptions = function(obj1, obj2) {
-
-    var clone = JSON.parse(JSON.stringify(obj1));
-
-    for (var p in obj2) {
-        try {
-          // Property in destination object set; update its value.
-          if ( obj2[p].constructor==Object ) {
-            clone[p] = MergeRecursive(clone[p], obj2[p]);
-
-          } else {
-            clone[p] = obj2[p];
-
-          }
-
-        } catch(e) {
-          // Property in destination object not set; create it and set its value.
-          clone[p] = obj2[p];
-
+    function loadConfig(filename, settings, failIfNotExists) {
+        failIfNotExists = (typeof failIfNotExists === 'undefined') ? false : failIfNotExists;
+        if (fs.exists(filename)) {
+            console.info("Reading " + filename);
+            var content = fs.read(filename);
+            var options = JSON.parse(content);
+            return extend(true, settings, options);
+        } else {
+            if (failIfNotExists) {
+                console.error("Could not load from " + filename);
+                phantom.exit(1);
+            } else {
+                console.info("Skipping " + filename + ": file not found.");
+            }
         }
     }
 
-    return clone;
+    var settings = {}
+    loadConfig('config.json', settings, true)
+    loadConfig('/etc/prerender.json', settings)
+    loadConfig('config-local.json', settings)
+
+    return settings;
 }
 
 //------------------------------------------
