@@ -32,12 +32,9 @@ More information about the [`#!` notation in URL's](https://support.google.com/w
 
 ### 2. AngularJS Module
 
+That app will automatically inject code to call phantom when angular has finished all his async requests.
 
-Check `seo.service.js.example` for an example setup for angularJS. The
-idea is to trigger phantomJS by calling `window.callPhantom()` when JS
-content is ready.
-
-If Phantom was not called at all, the page will be rendered with 10
+If Phantom was not called with angular-dependent script, the page will be rendered with 10
 seconds delay.
 
 ### 3. PhantomJS Module
@@ -110,7 +107,7 @@ prevent never-ending loops.
 		proxy_set_header X-Download-From  https://goabout.com/
 		proxy_set_header Authorization    Bearer some-predifined-key
 		if ($prerender) {
-		    # Only proyx if $prerender is not set to 0.
+				# Only proyx if $prerender is not set to 0.
 			proxy_pass  http://localhost:8082/$uri?$args;
 		}
 	}
@@ -156,25 +153,25 @@ set the proxy_pass rule to that machine.
 
 * key [not set by default]
 
-  A secret. If set any system that wants to access this prerender setup,
-  _must_ provide an Authorization: Bearer <key> header. Obviously this
-  is only safe if used over http*s*.
+	A secret. If set any system that wants to access this prerender setup,
+	_must_ provide an Authorization: Bearer <key> header. Obviously this
+	is only safe if used over http*s*.
 
 * url [default "https://goabout.com"]
 
-  The default url(-prefix) used to make requests to. Used if X-Download-
-  For header is not set with the request.
+	The default url(-prefix) used to make requests to. Used if X-Download-
+	For header is not set with the request.
 
 * port [default 8082]
 
-  The port to listen on. Note that for any port < 1024 you need some
-  kind of root/administrator rights.
+	The port to listen on. Note that for any port < 1024 you need some
+	kind of root/administrator rights.
 
 * user_agent [default "GoAbout/Prerenderer"]
 
-  Used to set the User-Agent header on outgoing requests, used to
-  identify itself to the target machine (= machine at url or X-Download-
-  From). Don't forget to reflect this setting in your NginX/Apache setup
-  to disable pre-rendering if a request is made with this User-Agent...
+	Used to set the User-Agent header on outgoing requests, used to
+	identify itself to the target machine (= machine at url or X-Download-
+	From). Don't forget to reflect this setting in your NginX/Apache setup
+	to disable pre-rendering if a request is made with this User-Agent...
 
 

@@ -2,6 +2,7 @@ var fs = require('fs');
 var system = require('system');
 var urlModule = require('url');
 var extend = require('extend');
+var watch = require('./watch.js');
 
 var checkVersion = function(major, minor, patch) {
     if (phantom.version.major < major) { return false; }
@@ -44,12 +45,8 @@ var renderHtml = function(url, cb) {
     }; //For service purposes only
 
     page.onInitialized = function() {
-       page.evaluate(function() {
-            setTimeout(function() {
-                console.debug("setTimeout() rang, calling callPhantom()");
-                window.callPhantom();
-            }, 10000); //If no callPhantom script was called on the page, then wait 10secs and load page anyway.
-        });
+       watch.angular(page); //Remove that if you're not using angular
+       watch.timeout(page);
     };
 
     console.debug("Opening page");
