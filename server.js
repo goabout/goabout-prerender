@@ -2,6 +2,17 @@ var fs = require('fs');
 var system = require('system');
 var urlModule = require('url');
 
+var checkVersion = function(major, minor, patch) {
+    if (phantom.version.major < major) { return false; }
+    if (phantom.version.major == major
+        && phantom.version.minor < minor) { return false; }
+    if (phantom.version.major == major
+        && phantom.version.minor == minor
+        && phantom.version.patch < patch) { return false; }
+
+    return true;
+}
+
 var renderHtml = function(url, cb) {
     console.debug('Requested ' + url);
 
@@ -100,6 +111,11 @@ var mergeOptions = function(obj1, obj2) {
 
 //------------------------------------------
 
+if (!checkVersion(1, 9, 8)) {
+    console.error("Minimum required phantom version is 1.9.8")
+    phantom.exit();
+}
+
 var config = configure()
 
 var server = require('webserver').create();
@@ -108,6 +124,8 @@ var port = config['port'] || system.env.PORT || 8082;
 var key = config['key'];
 var userAgent = config['user_agent'];
 
+console.info('Default url    ' + urlPrefix);
+console.info('Identifying as ' + userAgent);
 
 server.listen(port, function (request, response) {
     var route = urlModule.parse(request.url).pathname;
@@ -146,7 +164,4 @@ server.listen(port, function (request, response) {
 });
 
 console.info('Listening on   ' + port);
-console.info('Default url    ' + urlPrefix);
-console.info('Identifying as ' + userAgent);
-
 console.info('Press Ctrl+C to stop.');
