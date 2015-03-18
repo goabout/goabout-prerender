@@ -99,7 +99,7 @@ var config = configure()
 var server = require('webserver').create();
 var urlPrefix = config['url'];
 var port = system.env.PORT || config['port'] || 8082;
-var key = config['key'];
+var key =  system.env.KEY || config['key'];
 var userAgent = config['user_agent'];
 
 console.info('Default url    ' + urlPrefix);
