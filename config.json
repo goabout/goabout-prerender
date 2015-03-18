@@ -1,4 +1,6 @@
 {
+  "key": null,
   "url": "https://goabout.com",
-  "port": 8082
+  "port": 8082,
+  "user_agent": "GoAbout/Prerenderer"
 }
