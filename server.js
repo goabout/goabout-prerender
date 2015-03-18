@@ -21,6 +21,7 @@ var renderHtml = function(url, cb) {
 
     page.settings.loadImages = false; //Browser will load images by itself so there is no need for phantom to load them
     page.settings.localToRemoteUrlAccessEnabled = true;
+    page.settings.userAgent = userAgent;
 
     page.onCallback = function() {
         //Javascript is removed so it won't affect the page after loading
@@ -33,6 +34,7 @@ var renderHtml = function(url, cb) {
           };
         });
         //End
+        console.debug("Removed all scripts, calling callback with page-content");
         cb(page.content);
         page.close();
     };
@@ -44,6 +46,7 @@ var renderHtml = function(url, cb) {
     page.onInitialized = function() {
        page.evaluate(function() {
             setTimeout(function() {
+                console.debug("setTimeout() rang, calling callPhantom()");
                 window.callPhantom();
             }, 10000); //If no callPhantom script was called on the page, then wait 10secs and load page anyway.
         });
@@ -98,8 +101,8 @@ var config = configure()
 
 var server = require('webserver').create();
 var urlPrefix = config['url'];
-var port = config['port'] || system.env.PORT || 8082;
-var key = config['key'];
+var port = system.env.PORT || config['port'] || 8082;
+var key =  system.env.KEY || config['key'];
 var userAgent = config['user_agent'];
 
 console.info('Default url    ' + urlPrefix);
@@ -107,8 +110,9 @@ console.info('Identifying as ' + userAgent);
 
 server.listen(port, function (request, response) {
     var route = urlModule.parse(request.url).pathname;
-    var url = request.headers['X-Download-From'] || urlPrefix; //Use 'Download-from' header if present, otherwise use default one
-
+    var base = request.headers['X-Download-From'] || urlPrefix; //Use 'Download-from' header if present, otherwise use default one
+    console.debug("Base: " + base);
+    console.debug("Path: " + route);
 
     if (key) {
         if (!request.headers['Authorization']) {
@@ -125,16 +129,15 @@ server.listen(port, function (request, response) {
             response.close();
             return;
         }
+        console.debug("Allowing access for request with correct Authorization header")
     }
 
 
 
-    url = url + route; //Then add route path
+    url = base + route; //Then add route path
 
     renderHtml(url, function(html) {
         console.debug("Sending prerendered html to requester")
-
-        response.headers['User-Agent'] = userAgent;
         response.statusCode = 200;
         response.write(html);
         response.close();
