@@ -46,6 +46,9 @@ var renderHtml = function(url, cb) {
 
     page.onInitialized = function() {
        watch.angular(page); //Remove that if you're not using angular
+
+       //Insert your own custom watchers here if you are using other JS frameworks
+
        watch.timeout(page);
     };
 
