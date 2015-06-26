@@ -20,7 +20,7 @@ var renderHtml = function(url, cb) {
 
     var page = require('webpage').create();
 
-    page.settings.loadImages = false; //Browser will load images by itself so there is no need for phantom to load them
+    page.settings.loadImages = system.env.LOAD_IMAGES || config['load_images'] || true; //Browser will load images by itself so there is no need for phantom to load them. Currently loading enabled because of PhantomJS memory leak. See https://github.com/ariya/phantomjs/issues/12903
     page.settings.localToRemoteUrlAccessEnabled = true;
     page.settings.userAgent = userAgent;
 
