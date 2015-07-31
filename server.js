@@ -20,7 +20,7 @@ var renderHtml = function(url, cb) {
 
     var page = require('webpage').create();
 
-    page.settings.loadImages = system.env.LOAD_IMAGES || config['load_images'] || true; //Browser will load images by itself so there is no need for phantom to load them. Currently loading enabled because of PhantomJS memory leak. See https://github.com/ariya/phantomjs/issues/12903
+    page.settings.loadImages = system.env.LOAD_IMAGES || config['load_images'] || false; //Browser will load images by itself so there is no need for phantom to load them. Currently loading enabled because of PhantomJS memory leak. See https://github.com/ariya/phantomjs/issues/12903
     page.settings.localToRemoteUrlAccessEnabled = true;
     page.settings.userAgent = userAgent;
 
@@ -36,8 +36,8 @@ var renderHtml = function(url, cb) {
         });
         //End
         console.debug("Removed all scripts, calling callback with page-content");
-        cb(page.content);
         page.close();
+        cb(page.content);
     };
 
     page.onConsoleMessage = function(msg, lineNum, sourceId) {
