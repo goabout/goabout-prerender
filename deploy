@@ -62,16 +62,15 @@ put() {
 }
 
 # Add version.txt and build the distribution package
-rm -f dist.zip
+rm -f /tmp/dist.zip
 echo $version > version.txt
-zip -q -r ../dist.zip * -x config-local.json
+zip -q -r /tmp/dist.zip * -x config-local.json
 
 
 echo "Deploying to $bucket/$prefix - working for stage $stage / version $version"
 
 echo "Delete old artifacts"
 delete
-echo "Putting frontend..."
-put dist.zip goabout-prerender.zip "goabout-prerender-$version.zip"
-echo "Putting deploy_vars..."
-put deploy_vars.yml ansible_vars.yml "ansible_vars-$version.yml"
+echo "Putting prerender..."
+put /tmp/dist.zip goabout-prerender.zip "goabout-prerender-$version.zip"
+
