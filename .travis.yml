@@ -1,0 +1,18 @@
+language: python
+python:
+- "2.7"
+
+install:
+- pip install awscli
+
+script: true
+
+after_success:
+- ./deploy
+
+notifications:
+  hipchat:
+    rooms:
+      secure: aYK7eyblKtSHcBLBC+2OP3Xxcxn97X4C/yBrQ55o0t+FipCWoSP1d+5o2FOOFJN9Mf3znftm2urWe1fvspR2hjQoxI6QSBJDYCRcDAu5KnH2F1it2mysGhOfe5EBVS6kgM5eVGqnTFp/js/Vufm4wnFiRk7YAnE0Uo2hWNZWuJQ=
+    on_success: always
+    on_failure: always
