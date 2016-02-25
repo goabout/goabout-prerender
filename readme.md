@@ -45,25 +45,17 @@ For the app to be properly rendered, you will need to run the
 	$ phantomjs --disk-cache=no server.js
 
 
-By defautl this runs a prerender machine at localhost:8082 and will grab
-pages from goabout.com
+By default this runs a prerender machine at localhost:8082 and will grab pages from goabout.com
 
 The script loads the following three files, in order, to get settings
 from
 
 1. ./config.json
-2. /etc/prerender.json
-3. ./config-local.json
+2. ./config-local.json
+3. All the possible env variables
 
 The file `config.json` is included in the git-repo and should not change
 other than to change/add new default values.
-
-For local testing, the file `config-local.json` can be used to overload
-all settings, so you don't have to change `config.json` and get merge
-conflicts.
-
-The file `/etc/prerender.json` can be used for server set-ups where you'd
-want all configuration to be in the `/etc` folder.
 
 See settings section below.
 
@@ -140,13 +132,27 @@ An easy way would be to make a machine at Heroku.com with PhantomJS
 buildpack(https://github.com/stomita/heroku-buildpack-phantomjs) Just
 create a machine and push code there without any changes.
 
-You should make sure that only specific sources can access this machine.
-Easiest way to protect your PhantomJS is to install it on the same
-machine and only allow local connections to it in your firewall.
+### On Heroku
 
-Otherwise you could setup node.js and PhantomJS on your own server and
-set the proxy_pass rule to that machine.
+1. [Get a Heroku account](https://devcenter.heroku.com/articles/quickstart) and install their [awesome toolbelt](https://toolbelt.heroku.com)
+2. Clone this repo and push it up to an Heroku instance or (Or use their dashboard to make an app, fork it and connect it to your fork in heroku dashboard)
 
+```
+git clone git@github.com:goabout/spreadsheets-cacher.git
+cd spreadsheets-cacher
+heroku create
+git push heroku master
+```
+
+3. Set up env variables with `config:set` (see that [guide](https://devcenter.heroku.com/articles/nodejs-support#customizing-the-build-process))
+
+### On docker
+1. Make sure you're familiar with [Docker](https://www.docker.com/) and it is installed on your machine
+```
+docker build .
+docker run -p <your_preferred_port>:80 -d <id>
+```
+(Don't forget to pass ENV variables as well)
 
 
 ## Settings

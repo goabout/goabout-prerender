@@ -84,7 +84,6 @@ var configure = function() {
 
     var settings = {}
     loadConfig('config.json', settings, true)
-    loadConfig('/etc/prerender.json', settings)
     loadConfig('config-local.json', settings)
 
     return settings;
