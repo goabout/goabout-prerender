@@ -1,18 +1,25 @@
-language: python
-python:
-- "2.7"
+language: node_js
+node_js: 5.3.0
 
-install:
-- pip install awscli
+sudo: required
 
-script: true
+services:
+- docker
 
-after_success:
-- ./deploy
+env:
+  global:
+  - DOCKER_EMAIL=tech@goabout.com
+  - DOCKER_USERNAME=goabouttech
+  # DOCKER_PASSWORD
+  - secure: RN5670dL3yE2om6n+lgtwhhMXBFhN1tpAOXjUca5AF+lHAmi+e+EhLEyjFFq0FI12Z/WMkwpRkdsnUK5zbximPON6ZvfrDLbRNG27vZ1kvgGn1Lwzed1SVg/p+DwQF3gHsrBIets3zctphcnylGlN2HG0dzXbjIocoq2VNUSo2o=
+  # ANSIBLE_VAULT_PASSWORD
+  - secure: YYulO6UjW5V8wXpf/I3wZuZI/jF4U34rUM/gseIrcIBVRf4iuJ0E9PxFexOdPwGgfl5gJYj6qtpgtFlEK1ATjXCq1i1CTXB6fimvXSWsliUNn799OelefHEFrDSwLZbi1e8UuN0tXDD6OBuhSnXtBDvxKu67fNQoxaEkNNQT03A=
 
-notifications:
-  hipchat:
-    rooms:
-      secure: aYK7eyblKtSHcBLBC+2OP3Xxcxn97X4C/yBrQ55o0t+FipCWoSP1d+5o2FOOFJN9Mf3znftm2urWe1fvspR2hjQoxI6QSBJDYCRcDAu5KnH2F1it2mysGhOfe5EBVS6kgM5eVGqnTFp/js/Vufm4wnFiRk7YAnE0Uo2hWNZWuJQ=
-    on_success: always
-    on_failure: always
+install: true
+
+before_script: docker login -e="$DOCKER_EMAIL" -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD"
+
+script: scripts/_integrate.sh
+
+cache:
+  apt: true
