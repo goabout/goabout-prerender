@@ -30,7 +30,7 @@ gitrev=`git rev-parse HEAD`
 docker build --pull --tag=goabout/goabout-prerender:$gitrev .
 docker tag --force goabout/goabout-prerender:$gitrev goabout/goabout-prerender:$stage
 if [ "$stage" = "master" ]; then
-  docker tag --force goabout/goabout-prerender:$gitrev goabout/spreadsheets-cacher
+  docker tag --force goabout/goabout-prerender:$gitrev goabout/goabout-prerender
 fi
 
 docker push goabout/goabout-prerender:$gitrev
