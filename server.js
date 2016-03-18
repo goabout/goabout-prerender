@@ -102,10 +102,11 @@ var server = require('webserver').create();
 var urlPrefix = config['url'];
 var port = system.env.PORT || config['port'] || 8082;
 var key =  system.env.KEY || config['key'];
-var userAgent = config['user_agent'];
+var userAgent = system.env.USER_AGENT ||config['user_agent'];
 
 console.info('Default url    ' + urlPrefix);
 console.info('Identifying as ' + userAgent);
+console.info('Token is ' + key);
 
 server.listen(port, function (request, response) {
     var route = urlModule.parse(request.url).pathname;
