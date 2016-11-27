@@ -1,3 +1,6 @@
+# DEPRECATED IN FAVOR OF [GOABOUT/PRERENDER](https://github.com/goabout/prerender)
+# PLEASE, DO NOT USE THIS REPO
+
 # What it is
 
 
